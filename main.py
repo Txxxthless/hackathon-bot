@@ -18,12 +18,14 @@ def start(msg):
 def help(msg):
         message = f'<b>Я можу виконувати такі команди: </b>'
         bot.send_message(msg.chat.id, message, parse_mode='html')
-        msgList = f'<b>/start - початок роботи\n/help - перелік функціоналу' \
+        msgList = f'<b>/start - початок роботи' \
+                  f'\n/help - перелік функціоналу' \
                   f'\n/randompaste - випадково сгенерована фраза' \
                   f'\n/randomcat - випадкова світлина з кицею' \
-                  f'\n/dota - створення опросу про готовність піти у Dota 2</b>'
+                  f'\n/dota - створення опитування про готовність піти у Dota 2' \
+                  f'\n/forward - пересилання випадкового повідомлення із каналу з мудрими виразами' \
+                  f'\n/rollformid - випадкове число від 1 до 100</b>'
         bot.send_message(msg.chat.id, msgList, parse_mode='html')
-
 
 @bot.message_handler(commands=['randompaste'])
 def randompaste(msg):
@@ -54,6 +56,16 @@ def dota(msg):
     message = f'Погнали в дотку?'
     bot.send_poll(msg.chat.id, message, ["Так!","Ні..."],False, close_date=int(round(time.time() + 3600)),)
 
+@bot.message_handler(commands=['forward'])
+def forward(msg):
+    messageId = random.randint (3, 12)
+    bot.forward_message(msg.chat.id, from_chat_id='-1001449056768', message_id=messageId)
 
+@bot.message_handler(commands=['rollformid'])
+def rollformid(msg):
+    message = f'<b>{msg.from_user.first_name} отримує число від 1 до 100: </b>'
+    x = random.randint(1, 100)
+    bot.send_message(msg.chat.id, message, parse_mode='html')
+    bot.send_message(msg.chat.id, x, parse_mode='html')
 
 bot.polling(none_stop=True)

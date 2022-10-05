@@ -3,7 +3,7 @@ import random
 import requests
 import time
 from telebot import types
-
+from openpyxl import load_workbook
 bot = telebot.TeleBot('5715762546:AAFOrpIoGNKEmx2_qHi-P1z95-pTGviuOYs')
 
 # не пам'ятаю нащо мені знадобилися окремі функції :/
@@ -45,7 +45,8 @@ def help(msg):
                   f'\n/randomcat - випадкова світлина з кицею' \
                   f'\n/dota - створення опитування про готовність піти у Dota 2' \
                   f'\n/forward - пересилання випадкового повідомлення із каналу з мудрими виразами' \
-                  f'\n/rollformid - випадкове число від 1 до 100</b>'
+                  f'\n/rollformid - випадкове число від 1 до 100</b>' \
+                  f'\n/schedule - показати розклад ПЗ-22-3'
         bot.send_message(msg.chat.id, msgList, parse_mode='html')
 
 @bot.message_handler(commands=['randomphrase'])
@@ -86,6 +87,42 @@ def rollformid(msg):
     rollNumber = random.randint(1, 100)
     bot.send_message(msg.chat.id, message, parse_mode='html')
     bot.send_message(msg.chat.id, f'{rollNumber}', parse_mode='html')
+
+@bot.message_handler(commands=['schedule'])
+def schedule(msg):
+    monday = ['','','','','']
+    book = load_workbook(filename="D:\hachathon-bot\розклад.xlsx")
+    sheet = book['Лист1']
+    for i in range(1, 6):
+        number = sheet['A' + str(i)].value
+        day = sheet['B' + str(i)].value
+        monday[i-1] = f'{number} {day}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    bot.send_message(msg.chat.id, message, parse_mode='html')
+    for i in range(1, 6):
+        number = sheet['A' + str(i)].value
+        day = sheet['C' + str(i)].value
+        monday[i-1] = f'{number} {day}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    bot.send_message(msg.chat.id, message, parse_mode='html')
+    for i in range(1, 6):
+        number = sheet['A' + str(i)].value
+        day = sheet['D' + str(i)].value
+        monday[i-1] = f'{number} {day}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    bot.send_message(msg.chat.id, message, parse_mode='html')
+    for i in range(1, 6):
+        number = sheet['A' + str(i)].value
+        day = sheet['E' + str(i)].value
+        monday[i-1] = f'{number} {day}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    bot.send_message(msg.chat.id, message, parse_mode='html')
+    for i in range(1, 6):
+        number = sheet['A' + str(i)].value
+        day = sheet['F' + str(i)].value
+        monday[i-1] = f'{number} {day}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    bot.send_message(msg.chat.id, message, parse_mode='html')
 
 # inline-мод
 @bot.inline_handler(lambda query: query.query == 'фраза')
@@ -160,5 +197,7 @@ def query_text(inline_query):
         bot.answer_inline_query(inline_query.id, [result, result2,result3,result4,result5])
     except Exception as e:
         print(e)
+
+
 
 bot.polling(none_stop=True)

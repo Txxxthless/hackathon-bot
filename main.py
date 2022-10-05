@@ -90,38 +90,38 @@ def rollformid(msg):
 
 @bot.message_handler(commands=['schedule'])
 def schedule(msg):
-    monday = ['','','','','']
+    monday = ['','','','','','']
     book = load_workbook(filename="D:\hachathon-bot\розклад.xlsx") #шлях до файла розклад.xlsx
     sheet = book['Лист1']
-    for i in range(1, 6):
+    for i in range(1, 7):
         number = sheet['A' + str(i)].value
         day = sheet['B' + str(i)].value
         monday[i-1] = f'{number} {day}'
-    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}\n{monday[5]}'
     bot.send_message(msg.chat.id, message, parse_mode='html')
-    for i in range(1, 6):
+    for i in range(1, 7):
         number = sheet['A' + str(i)].value
         day = sheet['C' + str(i)].value
         monday[i-1] = f'{number} {day}'
-    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}\n{monday[5]}'
     bot.send_message(msg.chat.id, message, parse_mode='html')
-    for i in range(1, 6):
+    for i in range(1, 7):
         number = sheet['A' + str(i)].value
         day = sheet['D' + str(i)].value
         monday[i-1] = f'{number} {day}'
-    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}\n{monday[5]}'
     bot.send_message(msg.chat.id, message, parse_mode='html')
-    for i in range(1, 6):
+    for i in range(1, 7):
         number = sheet['A' + str(i)].value
         day = sheet['E' + str(i)].value
         monday[i-1] = f'{number} {day}'
-    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}\n{monday[5]}'
     bot.send_message(msg.chat.id, message, parse_mode='html')
-    for i in range(1, 6):
+    for i in range(1, 7):
         number = sheet['A' + str(i)].value
         day = sheet['F' + str(i)].value
         monday[i-1] = f'{number} {day}'
-    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}'
+    message = f'{monday[0]}\n{monday[1]}\n{monday[2]}\n{monday[3]}\n{monday[4]}\n{monday[5]}'
     bot.send_message(msg.chat.id, message, parse_mode='html')
 
 # inline-мод

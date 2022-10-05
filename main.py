@@ -91,7 +91,7 @@ def rollformid(msg):
 @bot.message_handler(commands=['schedule'])
 def schedule(msg):
     monday = ['','','','','']
-    book = load_workbook(filename="D:\hachathon-bot\розклад.xlsx")
+    book = load_workbook(filename="D:\hachathon-bot\розклад.xlsx") #шлях до файла розклад.xlsx
     sheet = book['Лист1']
     for i in range(1, 6):
         number = sheet['A' + str(i)].value

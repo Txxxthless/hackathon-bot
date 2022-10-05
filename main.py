@@ -1,5 +1,3 @@
-import re
-
 import telebot
 import random
 import requests
@@ -74,9 +72,9 @@ def forward(msg):
 @bot.message_handler(commands=['rollformid'])
 def rollformid(msg):
     message = f'<b>{msg.from_user.first_name} отримує число від 1 до 100: </b>'
-    x = random.randint(1, 100)
+    rollNumber = random.randint(1, 100)
     bot.send_message(msg.chat.id, message, parse_mode='html')
-    bot.send_message(msg.chat.id, x, parse_mode='html')
+    bot.send_message(msg.chat.id, f'{rollNumber}', parse_mode='html')
 
 # inline-мод
 @bot.inline_handler(lambda query: query.query == 'фраза')
@@ -104,20 +102,7 @@ def query_photo(inline_query):
     except Exception as e:
         print(e)
 
-@bot.inline_handler(lambda query: query.query == 'мгр')
-def query_gif(inline_query):
-    try:
-        result = types.InlineQueryResultGif(id='1', gif_url='https://media.tenor.com/TZS6fvPcrl0AAAAd/senator-armstrong-armstrong.gif',
-                                            thumb_url='https://media.tenor.com/TZS6fvPcrl0AAAAd/senator-armstrong-armstrong.gif')
-        result2 = types.InlineQueryResultGif(id='2', gif_url='https://media.tenor.com/t_OITIPhJTkAAAAC/armstrong-senator-armstrong.gif',
-                                             thumb_url='https://media.tenor.com/t_OITIPhJTkAAAAC/armstrong-senator-armstrong.gif')
-        result3 = types.InlineQueryResultGif(id='3', gif_url='https://media.tenor.com/t94YjtEipQ0AAAAS/senator-armstrong-hug-senator-armstrong.gif',
-                                             thumb_url='https://media.tenor.com/t94YjtEipQ0AAAAS/senator-armstrong-hug-senator-armstrong.gif')
-        bot.answer_inline_query(inline_query.id, [result, result2, result3])
-    except Exception as e:
-        print(e)
-
-@bot.inline_handler(lambda query: query.query == 'Бен')
+@bot.inline_handler(lambda query: query.query == 'бен')
 def query_audio(inline_query):
     try:
         result = types.InlineQueryResultAudio(id='1',audio_url='https://cdn.discordapp.com/attachments/622518716210610187/1027172627124600912/yes.mp3',title='Yes')
@@ -133,6 +118,16 @@ def query_text(inline_query):
         message = f'Ваш рол: {rollNumber} !'
         result = types.InlineQueryResultArticle('1', 'Ролимо за мід', types.InputTextMessageContent(message))
         bot.answer_inline_query(inline_query.id, [result], cache_time=1)
+    except Exception as e:
+        print(e)
+
+@bot.inline_handler(lambda query: query.query == 'мгр')
+def query_gif(inline_query):
+    try:
+        r = telebot.types.InlineQueryResultGif(id='1',
+                                            gif_url='media.tenor.com/t_OITIPhJTkAAAAC',
+                                            thumb_url='media.tenor.com/t_OITIPhJTkAAAAC')
+        bot.answer_inline_query(inline_query.id, [r])
     except Exception as e:
         print(e)
 

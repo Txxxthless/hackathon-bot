@@ -40,17 +40,28 @@ def help(msg):
         bot.send_message(msg.chat.id, message, parse_mode='html')
         msgList = f'<b>/start - початок роботи' \
                   f'\n/help - перелік функціоналу' \
-                  f'\n/randompaste - випадково сгенерована фраза' \
+                  f'\n/randomphrase - випадково сгенерована фраза' \
+                  f'\n/randompaste - випадкова паста з чату ФПМ'\
                   f'\n/randomcat - випадкова світлина з кицею' \
                   f'\n/dota - створення опитування про готовність піти у Dota 2' \
                   f'\n/forward - пересилання випадкового повідомлення із каналу з мудрими виразами' \
                   f'\n/rollformid - випадкове число від 1 до 100</b>'
         bot.send_message(msg.chat.id, msgList, parse_mode='html')
 
-@bot.message_handler(commands=['randompaste'])
-def randompaste(msg):
+@bot.message_handler(commands=['randomphrase'])
+def randomphrase(msg):
         message = randompaste_func()
         bot.send_message(msg.chat.id, message, parse_mode='html' )
+
+@bot.message_handler(commands=['randompaste'])
+def randompaste(msg):
+    pastelist = ['<b>Миша - военный, колдун, экстрасенс, чародей, психолог, спец по агентам, спец из рода панасенковых, порноактёр, гачибой, козак та й ваще норм мужик, пивка 0,5 бахнуть запросто, президент мира, стриптизер, ещё человек гений, и будущий президент, ещё он будет колонизировать марс, воевал, екзорцист, экстрасенс, идеолог, филантроп, интроверт, император Галактики, ещё не любит когда его перебивают</b>',
+                 '<b>Привіт! Ти напевно гадаєш, хто ми, і як тебе знашли? Все просто. МИ хакери(ні), ми студрада ФПМ, вітаємо зі вступом. Якщо тебе немає в чаті абітурієнтів факультету, то заходь, обовʼязково.</b>',
+                 '<b>как тут писать блин что-то, я как не зайду либо дота, либо гачи, либо ещё что-то за что я не шарю, так лучше совсем не писать ничего чем бред какой-то</b>',
+                 '<b>Нет более глубокого одиночества, чем одиночество самурая, разве что, может быть, одиночество тигра в джунглях. пойду в доту шоль</b>',
+                 '<b>джо байден присоединяйся в пт-22-1, мы не дадим в обиду</b>']
+    item = random.randint(0, 4)
+    bot.send_message(msg.chat.id, pastelist[item],parse_mode='html')
 
 @bot.message_handler(commands=['randomcat'])
 def randomcat(msg):
@@ -98,7 +109,16 @@ def query_photo(inline_query):
         result3 = types.InlineQueryResultPhoto('3',
                                          'https://cdn2.thecatapi.com/images/9ea.jpg',
                                          'https://cdn2.thecatapi.com/images/9ea.jpg',)
-        bot.answer_inline_query(inline_query.id, [result, result2, result3])
+        result4 = types.InlineQueryResultPhoto('4',
+                                         'https://cdn2.thecatapi.com/images/CRcbyTIzQ.jpg',
+                                         'https://cdn2.thecatapi.com/images/CRcbyTIzQ.jpg', )
+        result5 = types.InlineQueryResultPhoto('5',
+                                         'https://cdn2.thecatapi.com/images/115.png',
+                                         'https://cdn2.thecatapi.com/images/115.png')
+        result6 = types.InlineQueryResultPhoto('6',
+                                         'https://cdn2.thecatapi.com/images/a4p.jpg',
+                                         'https://cdn2.thecatapi.com/images/a4p.jpg', )
+        bot.answer_inline_query(inline_query.id, [result, result2, result3,result4,result5,result6])
     except Exception as e:
         print(e)
 
@@ -121,13 +141,23 @@ def query_text(inline_query):
     except Exception as e:
         print(e)
 
-@bot.inline_handler(lambda query: query.query == 'мгр')
+@bot.inline_handler(lambda query: query.query == 'тримай')
 def query_gif(inline_query):
     try:
-        r = telebot.types.InlineQueryResultGif(id='1',
-                                            gif_url='media.tenor.com/t_OITIPhJTkAAAAC',
-                                            thumb_url='media.tenor.com/t_OITIPhJTkAAAAC')
+        r = types.InlineQueryResultGif('1', gif_url='https://media.tenor.com/t_OITIPhJTkAAAAC', thumb_url='https://media.tenor.com/t_OITIPhJTkAAAAC')
         bot.answer_inline_query(inline_query.id, [r])
+    except Exception as e:
+        print(e)
+
+@bot.inline_handler(lambda query: query.query == 'паста')
+def query_text(inline_query):
+    try:
+        result = types.InlineQueryResultArticle('1', 'Правда про Мішу', types.InputTextMessageContent('Миша - военный, колдун, экстрасенс, чародей, психолог, спец по агентам, спец из рода панасенковых, порноактёр, гачибой, козак та й ваще норм мужик, пивка 0,5 бахнуть запросто, президент мира, стриптизер, ещё человек гений, и будущий президент, ещё он будет колонизировать марс, воевал, екзорцист, экстрасенс, идеолог, филантроп, интроверт, император Галактики, ещё не любит когда его перебивают'))
+        result2 = types.InlineQueryResultArticle('2', 'Тебе знайшли', types.InputTextMessageContent('Привіт! Ти напевно гадаєш, хто ми, і як тебе знашли? Все просто. МИ хакери(ні), ми студрада ФПМ, вітаємо зі вступом. Якщо тебе немає в чаті абітурієнтів факультету, то заходь, обовʼязково.'))
+        result3 = types.InlineQueryResultArticle('3', 'Чат ФПМ', types.InputTextMessageContent('как тут писать блин что-то, я как не зайду либо дота, либо гачи, либо ещё что-то за что я не шарю, так лучше совсем не писать ничего чем бред какой-то'))
+        result4 = types.InlineQueryResultArticle('4', 'Мудрощі', types.InputTextMessageContent('Нет более глубокого одиночества, чем одиночество самурая, разве что, может быть, одиночество тигра в джунглях. пойду в доту шоль'))
+        result5=types.InlineQueryResultArticle('5', 'Джо Байден', types.InputTextMessageContent('джо байден присоединяйся в пт-22-1, мы не дадим в обиду'))
+        bot.answer_inline_query(inline_query.id, [result, result2,result3,result4,result5])
     except Exception as e:
         print(e)
 

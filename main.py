@@ -198,6 +198,4 @@ def query_text(inline_query):
     except Exception as e:
         print(e)
 
-
-
 bot.polling(none_stop=True)

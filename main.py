@@ -126,6 +126,14 @@ def query_audio(inline_query):
     except Exception as e:
         print(e)
 
-
+@bot.inline_handler(lambda query: query.query == 'рол')
+def query_text(inline_query):
+    try:
+        rollNumber = random.randint(1, 100)
+        message = f'Ваш рол: {rollNumber} !'
+        result = types.InlineQueryResultArticle('1', 'Ролимо за мід', types.InputTextMessageContent(message))
+        bot.answer_inline_query(inline_query.id, [result], cache_time=1)
+    except Exception as e:
+        print(e)
 
 bot.polling(none_stop=True)

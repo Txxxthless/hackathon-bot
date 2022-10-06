@@ -450,10 +450,26 @@ def play(msg):
         if choice.text == "1" or choice.text == "2" or choice.text == "3":
             message = f'<b>Гру закінчено! Ваші результати:\n   \n❤: {p.hp}\n ⭐: {p.karma}\n 💰: {p.balance}\n 🏥: {p.deathcounter}</b>'
             bot.send_message(choice.chat.id, message, parse_mode='html')
+            markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+            endbutton = types.KeyboardButton('/endgame')
+            markup.add(endbutton)
+            bot.send_message(choice.chat.id, f'<b>Для закінчення виберіть команду /endgame !</b>', parse_mode='html', reply_markup=markup)
 
-
-
-
+@bot.message_handler(commands=['endgame'])
+def endgame(msg):
+    message = f'<b>Гру закінчено. Нагадую функціонал: </b>'
+    bot.send_message(msg.chat.id, message, parse_mode='html')
+    msgList = f'<b>/start - початок роботи' \
+              f'\n/help - перелік функціоналу' \
+              f'\n/randomphrase - випадково сгенерована фраза' \
+              f'\n/randompaste - випадкова паста з чату ФПМ' \
+              f'\n/randomcat - випадкова світлина з кицею' \
+              f'\n/dota - створення опитування про готовність піти у Dota 2' \
+              f'\n/forward - пересилання випадкового повідомлення із каналу з мудрими виразами' \
+              f'\n/rollformid - випадкове число від 1 до 100' \
+              f'\n/schedule - показати розклад ПЗ-22-3' \
+              f'\n/play - пограти у гру "Життя"</b>'
+    bot.send_message(msg.chat.id, msgList, parse_mode='html')
 
 
 bot.polling(none_stop=True)

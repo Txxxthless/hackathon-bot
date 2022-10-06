@@ -179,14 +179,6 @@ def query_text(inline_query):
     except Exception as e:
         print(e)
 
-@bot.inline_handler(lambda query: query.query == 'тримай')
-def query_gif(inline_query):
-    try:
-        r = types.InlineQueryResultGif('1', gif_url='https://media.tenor.com/t_OITIPhJTkAAAAC', thumb_url='https://media.tenor.com/t_OITIPhJTkAAAAC')
-        bot.answer_inline_query(inline_query.id, [r])
-    except Exception as e:
-        print(e)
-
 @bot.inline_handler(lambda query: query.query == 'паста')
 def query_text(inline_query):
     try:
@@ -199,10 +191,20 @@ def query_text(inline_query):
     except Exception as e:
         print(e)
 
+@bot.inline_handler(lambda query: query.query == 'відео')
+def query_video(inline_query):
+    try:
+        result = types.InlineQueryResultCachedGif(id='1', gif_file_id='https://media.tenor.com/t_OITIPhJTkAAAAC')
+        bot.answer_inline_query(inline_query.id, [result], cache_time=1)
+    except Exception as e:
+        print(e)
 
-# гра
 
 
+
+  # гра
+
+#клас гравця
 class player:
     hp = int
     karma = int
@@ -224,28 +226,36 @@ class player:
     def karmacheck(self):
         if self.karma <= 0:
             status = f'<b>Ваша карма на низькому рівні, тому ви стикаєтесь із невдачею і втрачаєте здоров\'я.</b>'
-            self.hp -= 5
+            self.hp -= 15
             return status
         else:
             return f'<b>Карма на нормально рівні</b>'
     def balancecheck(self):
         if self.balance <= 0:
             status = f'<b>У вас замало коштів для підтримання нормальног життя і ви втрачаєте здоров\'я.</b>'
-            self.hp -= 5
+            self.hp -= 15
             return status
         else:
             return f'<b>Баланс на нормальному рівні</b>'
 
+    def reset(self):
+        self.hp = 70
+        self. balance = 200
+        self.karma = 4
+        self.deathcounter = 0
+
+p = player(70, 4, 200, 0)
 
 @bot.message_handler(commands=['play'])
 def play(msg):
-    rules = f'<b>Правила</b>'
+    rules = f'<b>Гра "Життя" - епічно-динамічний екшен-бойовик та РПГ. Суть гри така: ви йдете життєвим шляхом, де варіанти розвику дій ви вибираєте самі.' \
+            f' У вас є три стати: ❤ здоров\'я, ⭐ карма та 💰 баланс. Якщо ваше здоров\'я дорівнює нулю, то ви попадаєте до лікарні,' \
+            f'де вас лікують. Лічильник кількості ваших "смертей" буде в кінці. Якщо ваша карма або баланс меньше або рівен нулю, но кожет наступних хід ви втрачатимете здоров\'я.</b>'
     bot.send_message(msg.chat.id, rules, parse_mode='html')
     markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     startkey = types.KeyboardButton('Старт!')
     markup.add(startkey)
     bot.send_message(msg.chat.id, 'Готові?', reply_markup=markup)
-    p = player(5, 5, 200, 0)
 
     @bot.message_handler()
     def level(choice):
@@ -262,7 +272,7 @@ def play(msg):
             var1 = types.KeyboardButton('Сказати щось на дитячому')
             var2 = types.KeyboardButton('Спати')
             choicemarkup.add(var1, var2)
-            message = f'<b>Вітаю у грі життя. На данний момент ви тільки народилися. У вас все ще попереду. Здоров\'я та карма на максимумі.\n\n❤: {p.hp} / 100 \n⭐: {p.karma}  \n💰: {p.balance}</b>'
+            message = f'<b>Вітаю у грі життя. На данний момент ви тільки народилися. У вас все ще попереду. \n\n❤: {p.hp} / 100 \n⭐: {p.karma}  \n💰: {p.balance}</b>'
             bot.send_message(choice.chat.id, message, parse_mode='html', reply_markup=choicemarkup)
 
         if choice.text == "Сказати щось на дитячому" or choice.text == "Спати":
@@ -274,7 +284,7 @@ def play(msg):
             message = f'<b>Життя йде дуже швидко, хоча вам так і не здається. Ви вчитесь у школі. Батьки знову і звону кажуть вчити домашку, та вам це аж ніяк не цікаво.\n\n❤: {p.hp} / 100 \n⭐: {p.karma}  \n💰: {p.balance} </b>'
             bot.send_message(choice.chat.id, message, parse_mode='html', reply_markup=choicemarkup1)
         if choice.text == "Нащо та домашка? Футбол цікавіше":
-            p.hp -= 5
+            p.hp -= 20
             bot.send_message(choice.chat.id, 'Граючи у футбол, ви трохи скалічились.', parse_mode='html')
         if choice.text == "Саме час почати кар\'єру алкаша":
             p.hp -= 25
@@ -300,7 +310,7 @@ def play(msg):
             message = f'<b>Ну і нашо ти вибрав фізику одним із предметів на ЗНО? Що ж, перед тобою вибір, який багато хто вважає невмовірно серьозним. Навіть вирішальним.\n\n❤: {p.hp} / 100 \n⭐: {p.karma}  \n💰: {p.balance} </b>'
             bot.send_message(choice.chat.id, message, parse_mode='html', reply_markup=choicemarkup1)
         if choice.text == "Час регнути в дотку":
-            p.karma -= 1
+            p.karma -= 2
             bot.send_message(choice.chat.id, 'Трохи пограли в доту: втратили трохи карми через неперевні аморальні вислови, але потім в тільті пішли робити домашку', parse_mode='html')
         if choice.text == "Трохи побухати, а потім за навчання":
             p.hp -= 25
@@ -417,16 +427,16 @@ def play(msg):
             choicemarkup1.add(var1, var2, var3)
             message = f'Ви отримуєте можливіть працевлаштуватися, але заробіток обіцяють невеликий. Чи скористаєтесь цим?<b>\n\n❤: {p.hp} / 100 \n⭐: {p.karma}  \n💰: {p.balance}</b>'
             bot.send_message(choice.chat.id, message, parse_mode='html', reply_markup=choicemarkup1)
-        if choice == 'Скористатися можливітсю':
-            message = f'Ви скористалися можливітсю, але отримали не дуже багато грошей і з часом покинули компанію.'
+        if choice.text == 'Скористатися можливітсю':
             p.balance += 280
+            message = f'Ви скористалися можливітсю, але отримали не дуже багато грошей і з часом покинули компанію.'
             bot.send_message(choice.chat.id, message, parse_mode='html')
-        if choice == 'Не робити цього':
+        if choice.text == 'Не робити цього':
             message = f'Ви нічого не зробили.'
             bot.send_message(choice.chat.id, message, parse_mode='html')
-        if choice == 'Чекати на більш вигідну пропозицію':
-            message = f'Ви вирішили почекати і з часом отримали можливість працевлаштування із великою заробітнью платою. Але вийшло так, що вас звільнили...'
+        if choice.text == 'Чекати на більш вигідну пропозицію':
             p.balance += 720
+            message = f'Ви вирішили почекати і з часом отримали можливість працевлаштування із великою заробітнью платою. Але вийшло так, що вас звільнили...'
             bot.send_message(choice.chat.id, message, parse_mode='html')
 
         if choice.text == "Скористатися можливітсю" or choice.text == "Не робити цього" or choice.text == "Чекати на більш вигідну пропозицію":
@@ -440,14 +450,21 @@ def play(msg):
             deathscreen(healthmessage)
 
             choicemarkup1 = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-            var1 = types.KeyboardButton('1')
-            var2 = types.KeyboardButton('2')
-            var3 = types.KeyboardButton('3')
-            choicemarkup1.add(var1, var2, var3)
-            message = f'sit<b>\n\n❤: {p.hp} / 100 \n⭐: {p.karma}  \n💰: {p.balance}</b>'
+            var1 = types.KeyboardButton('Лимонад...')
+            var2 = types.KeyboardButton('Нічого...')
+            choicemarkup1.add(var1, var2)
+            message = f'Що робити, коли життя дає тобі лимони?<b>\n\n❤: {p.hp} / 100 \n⭐: {p.karma}  \n💰: {p.balance}</b>'
             bot.send_message(choice.chat.id, message, parse_mode='html', reply_markup=choicemarkup1)
+        if choice.text == 'Лимонад...':
+            message = f'<b>Правильно.</b>'
+            bot.send_message(choice.chat.id, message, parse_mode='html')
+            p.karma += 1
+        if choice.text == 'Нічого...':
+            message = f'<b>.....</b>'
+            bot.send_message(choice.chat.id, message, parse_mode='html')
+            p.karma -= 4
 
-        if choice.text == "1" or choice.text == "2" or choice.text == "3":
+        if choice.text == 'Нічого...' or choice.text == 'Лимонад...':
             message = f'<b>Гру закінчено! Ваші результати:\n   \n❤: {p.hp}\n ⭐: {p.karma}\n 💰: {p.balance}\n 🏥: {p.deathcounter}</b>'
             bot.send_message(choice.chat.id, message, parse_mode='html')
             markup = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
@@ -459,6 +476,7 @@ def play(msg):
 def endgame(msg):
     message = f'<b>Гру закінчено. Нагадую функціонал: </b>'
     bot.send_message(msg.chat.id, message, parse_mode='html')
+    p.reset()
     msgList = f'<b>/start - початок роботи' \
               f'\n/help - перелік функціоналу' \
               f'\n/randomphrase - випадково сгенерована фраза' \
@@ -470,6 +488,7 @@ def endgame(msg):
               f'\n/schedule - показати розклад ПЗ-22-3' \
               f'\n/play - пограти у гру "Життя"</b>'
     bot.send_message(msg.chat.id, msgList, parse_mode='html')
+
 
 
 bot.polling(none_stop=True)

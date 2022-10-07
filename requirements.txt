@@ -3,3 +3,5 @@ random
 requests
 time
 openpyxl
+types
+load_workbook

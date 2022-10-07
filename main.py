@@ -92,7 +92,13 @@ def rollformid(msg):
 @bot.message_handler(commands=['schedule'])
 def schedule(msg):
     monday = ['','','','','','']
-    book = load_workbook(filename="D:\hachathon-bot\розклад.xlsx") #шлях до файла розклад.xlsx
+    url = 'https://cdn.discordapp.com/attachments/622518716210610187/1027893962532470834/ff0176e6375905d5.xlsx'
+    name = 'розклад.xlsm'
+    req = requests.get(url)
+    with open(name, 'wb') as f:
+        f.write(req.content)
+    table = open('розклад.xlsm', 'rb')
+    book = load_workbook(filename=table)
     sheet = book['Лист1']
     for i in range(1, 7):
         number = sheet['A' + str(i)].value

@@ -1,0 +1,5 @@
+telebot
+random
+requests
+time
+openpyxl
